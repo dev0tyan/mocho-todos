@@ -31,7 +31,7 @@ router.post("/todos", async (req, res) => {
         return res.status(400).json({ msg: "No todo found error"})
     }
 
-    todo = JSON.stringify(todo);
+    //todo = JSON.stringify(todo);
 
     const newTodo = await collection.insertOne({ todo, status: false });
 
