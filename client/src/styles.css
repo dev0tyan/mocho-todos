@@ -99,8 +99,12 @@ input{
     padding: 0.5rem 1rem;
     width: 100%;
     font-size: 1rem;
-    
+
+    &:checked{
+        background-color: #34dba9;
+    }
 }
+
 
 .todo__status{
     background: transparent;
@@ -109,5 +113,10 @@ input{
     cursor: pointer;
     border-radius: 100%;
     border: none;
+    transition: all 0.2s;
+
+    &:hover {
+        transform: scale(1.15);
+    }
 }
 
