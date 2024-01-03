@@ -1,9 +1,13 @@
-import { faCircle } from '@fortawesome/free-regular-svg-icons';
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from "react";
 
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
+import Todo from './Todo';
+
 export default function App() {
+
   let today = new Date();
   const getDate = today.toDateString();
   const [todos, setTodos] = useState([]);
@@ -19,30 +23,51 @@ export default function App() {
     getTodos();
   }, []);
 
+  const totalCount = todos.length;
+
+  const createNewTodo = async (e) => {
+    e.preventDefault();
+    if (content.length > 3) {
+      const res = await fetch ("/api/todos", {
+        method: "POST",
+        body: JSON.stringify({ todo: content }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const newTodo = await res.json();
+
+      setContent('');
+      setTodos([...todos, newTodo]);
+    }
+  }
+
+
+
   return (
     <main className="container">
       <h3 className="date">{getDate}</h3>
-      <div className="todoCount">4 task</div>
-      <form className='form'>
-        <input 
-          className='form__input'
-          type="text"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Add a new todo" 
-          id="inputBox"
-        />
+      <div className="todoCount">
+        {totalCount} tasks
+      </div>
+      <form className='form' onSubmit={createNewTodo}>
+        <div className='form__input'>
+          <input 
+            type="text"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Add a new todo" 
+            autoComplete="off"
+            id="inputBox"
+          />
+          <button type="submit">
+            <FontAwesomeIcon icon={faPlus} style={{color: "#8a9ca5",}} />
+          </button>
+        </div>
         <div className="todos">
           {todos.length > 0 &&
             todos.map((todo) => (
-              <div key={todo._id} className="todo">
-                <div>
-                  <button className="todo__status">
-                    {todo.status ? <FontAwesomeIcon icon={faCircleCheck} style={{color: "#62dfa9",}} /> : <FontAwesomeIcon icon={faCircle} style={{color: "#a0a2a6",}} />}
-                  </button>
-                </div>
-                <p>{todo.todo}</p>
-              </div>
+              <Todo key={todo._id} todo={todo} setTodos={setTodos} />
             ))}
         </div>
       </form>
