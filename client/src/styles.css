@@ -183,9 +183,6 @@ input{
 @media (max-width: 420px) {
     .container {
         width: 370px;
-        height: 40vh;
     }
-    .todos {
-        width: 90%;
-    }
+
 }
